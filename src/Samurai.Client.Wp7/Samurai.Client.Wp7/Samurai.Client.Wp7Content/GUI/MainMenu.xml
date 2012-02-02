@@ -10,11 +10,11 @@
       <TextBlock Format="{parenttext}" Font="MainMenuFont.spritefont" Color="#000000" />
     </Button>
 
-    <!--<Button Text="Quickmatch" Visibility="Enabled">
+    <Button Name="btnQuickMatch" Text="Quickmatch" Visibility="Enabled">
       <TextBlock Format="{parenttext}" Font="MainMenuFont.spritefont" Color="#000000" />
     </Button>
-
-    <Button Text="Find Friend" Visibility="Enabled">
+    
+    <!--<Button Text="Find Friend" Visibility="Enabled">
       <TextBlock Format="{parenttext}" Font="MainMenuFont.spritefont" Color="#000000" />
     </Button>
 
