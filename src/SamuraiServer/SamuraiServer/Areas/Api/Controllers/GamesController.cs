@@ -101,6 +101,11 @@ namespace SamuraiServer.Areas.Api.Controllers
             return Json(new { ok = true, games = _gameStateProvider.ListOpenGames() }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetQuickGame()
+        {
+            return Json(new { ok= true, game = _gameStateProvider.ListOpenGames().RandomElement() }, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public ActionResult GetMap(Guid mapId)
         {
