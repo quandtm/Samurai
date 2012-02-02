@@ -49,6 +49,11 @@ namespace Samurai.Client.Wp7.Api
             Get("/Api/Games/GetGame?gameId=" + gameId, callback);
         }
 
+        public void GetQuickGame(Action<GetGameResponse, Exception> callback)
+        {
+            Get("/Api/Games/GetQuickGame", callback);
+        }
+        
         public void GetMap(Guid mapId, Action<GetMapResponse, Exception> callback)
         {
             Post("/Api/Games/GetMap", "mapid=" + mapId, callback);
