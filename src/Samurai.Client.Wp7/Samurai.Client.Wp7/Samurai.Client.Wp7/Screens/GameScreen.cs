@@ -22,6 +22,7 @@ namespace Samurai.Client.Wp7.Screens
 
         private Map map;
         private Player player;
+        private GamePlayer gamePlayer;
         private GameState game;
         private ServerApi api;
         private bool isPractice;
@@ -46,6 +47,8 @@ namespace Samurai.Client.Wp7.Screens
         {
             this.map = map;
             this.game = game;
+            this.gamePlayer = game.Players[0]; // We know that player 0 is human for single player games
+            this.player = gamePlayer.Player;
             this.isPractice = true;
         }
 
@@ -131,7 +134,26 @@ namespace Samurai.Client.Wp7.Screens
             else
             {
                 // Process move
+                Unit target;
+                if (GetTappedUnit(out target, gesture.Position))
+                {
+                    // Change selection if player taps another of their units, or deselect if they tap the same unit
+                    if (target == selectedUnit)
+                        selectedUnit = null;
+                    else if (IsPlayerUnit(gamePlayer, target))
+                        selectedUnit = target;
+                }
             }
+        }
+
+        private bool IsPlayerUnit(GamePlayer gamePlayer, Unit target)
+        {
+            for (int u = 0; u < gamePlayer.Units.Count; u++)
+            {
+                if (gamePlayer.Units[u] == target)
+                    return true;
+            }
+            return false;
         }
 
         private bool GetTappedUnit(out Unit selectedUnit, Vector2 position)
@@ -167,7 +189,7 @@ namespace Samurai.Client.Wp7.Screens
             if (renderer == null)
                 return;
 
-            renderer.DrawMap(device, sb, map, game, xOffset, yOffset);
+            renderer.DrawMap(device, sb, map, game, xOffset, yOffset, selectedUnit);
 
             base.Draw(elapsedSeconds, device);
         }

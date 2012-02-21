@@ -24,7 +24,7 @@ namespace Samurai.Client.Wp7.Graphics
             textures.Add(content.Load<Texture2D>("Textures\\samurai_red_64"));
         }
 
-        public void DrawMap(GraphicsDevice device, SpriteBatch sb, Map map, GameState state, int xOffset, int yOffset)
+        public void DrawMap(GraphicsDevice device, SpriteBatch sb, Map map, GameState state, int xOffset, int yOffset, Unit selectedUnit)
         {
             if (sb == null || map == null)
                 return;
@@ -50,6 +50,7 @@ namespace Samurai.Client.Wp7.Graphics
             }
             sb.End();
 
+            var origin = new Vector2(CellWidth / 2, CellWidth / 2);
             sb.Begin();
             for (int p = 0; p < state.Players.Count; p++)
             {
@@ -62,11 +63,23 @@ namespace Samurai.Client.Wp7.Graphics
                         {
                             if (unit.X >= (xOffset / CellWidth) && unit.Y >= (yOffset / CellWidth) && unit.X < width && unit.Y < height)
                             {
-                                drawRect.Y = -yStart + ((unit.Y - (yOffset / CellWidth)) * CellWidth);
-                                drawRect.X = -xStart + ((unit.X - (xOffset / CellWidth)) * CellWidth);
+                                drawRect.Y = -yStart + ((unit.Y - (yOffset / CellWidth)) * CellWidth) + (int)origin.X;
+                                drawRect.X = -xStart + ((unit.X - (xOffset / CellWidth)) * CellWidth) + (int)origin.X;
                                 var tex = GetUnitTex(unit);
                                 if (tex != null)
-                                    sb.Draw(tex, drawRect, Color.White);
+                                {
+                                    if (selectedUnit == unit)
+                                    {
+                                        drawRect.Width = (int)(drawRect.Width * 1.2f);
+                                        drawRect.Height = (int)(drawRect.Height * 1.2f);
+                                    }
+                                    sb.Draw(tex, drawRect, null, Color.White, 0, origin, SpriteEffects.None, 0);
+                                    if (selectedUnit == unit)
+                                    {
+                                        drawRect.Width = CellWidth;
+                                        drawRect.Height = CellWidth;
+                                    }
+                                }
                             }
                         }
                     }
