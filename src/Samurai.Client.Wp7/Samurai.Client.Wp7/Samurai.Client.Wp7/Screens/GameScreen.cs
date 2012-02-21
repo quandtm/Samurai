@@ -132,13 +132,17 @@ namespace Samurai.Client.Wp7.Screens
             if (selectedUnit == null)
             {
                 // Figure out which unit was selected (if any)
-                GetTappedUnit(out selectedUnit, gesture.Position);
+                GamePlayer p;
+                GetTappedUnit(out selectedUnit, gesture.Position, out p);
+                if (p != gamePlayer)
+                    selectedUnit = null;
             }
             else
             {
                 // Process move
                 Unit target;
-                if (GetTappedUnit(out target, gesture.Position))
+                GamePlayer p;
+                if (GetTappedUnit(out target, gesture.Position, out p))
                 {
                     // Change selection if player taps another of their units, or deselect if they tap the same unit
                     if (target == selectedUnit)
@@ -149,8 +153,12 @@ namespace Samurai.Client.Wp7.Screens
                             intents.RemoveAt(removeIndex);
                         selectedUnit = null;
                     }
-                    else if (IsPlayerUnit(gamePlayer, target))
+                    else if (p == gamePlayer)
                         selectedUnit = target;
+                    else
+                    {
+                        // Must be enemy unit, attack!
+                    }
                 }
                 else
                 {
@@ -194,16 +202,6 @@ namespace Samurai.Client.Wp7.Screens
             return false;
         }
 
-        private bool IsPlayerUnit(GamePlayer gamePlayer, Unit target)
-        {
-            for (int u = 0; u < gamePlayer.Units.Count; u++)
-            {
-                if (gamePlayer.Units[u] == target)
-                    return true;
-            }
-            return false;
-        }
-
         private void GetCellLocation(Vector2 position, out int x, out int y)
         {
             position.X += xOffset;
@@ -212,9 +210,10 @@ namespace Samurai.Client.Wp7.Screens
             y = (int)(position.Y / Renderer.CellWidth);
         }
 
-        private bool GetTappedUnit(out Unit selectedUnit, Vector2 position)
+        private bool GetTappedUnit(out Unit selectedUnit, Vector2 position, out GamePlayer player)
         {
             selectedUnit = null;
+            player = null;
 
             int x, y;
             GetCellLocation(position, out x, out y);
@@ -229,6 +228,7 @@ namespace Samurai.Client.Wp7.Screens
                         if (unit.X == x && unit.Y == y)
                         {
                             selectedUnit = unit;
+                            player = game.Players[p];
                             return true;
                         }
                     }
