@@ -21,7 +21,7 @@ namespace SamuraiServer.Data
 
         public override string ImageSpriteResource
         {
-            get { throw new NotImplementedException(); }
+            get { return "samurai_red_64"; }
         }
     }
 }

@@ -79,9 +79,8 @@ namespace Samurai.Client.Wp7.Screens
 
         public override void Update(double elapsedSeconds)
         {
-            // TODO: Replace with proper logic once implemented
             if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Back))
-                Manager.ExitGame();
+                Manager.TransitionTo<MainMenuScreen>();
 
             var touches = TouchPanel.GetState();
             if (touches.Count > 0)
@@ -134,9 +133,7 @@ namespace Samurai.Client.Wp7.Screens
             if (renderer == null)
                 return;
 
-            sb.Begin();
-            renderer.DrawMap(device, sb, map, xOffset, yOffset);
-            sb.End();
+            renderer.DrawMap(device, sb, map, game, xOffset, yOffset);
 
             base.Draw(elapsedSeconds, device);
         }

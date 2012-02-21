@@ -23,6 +23,9 @@ namespace Samurai.Client.Wp7.Api
                 bool parsing = true;
                 int height = 0;
                 int y = 0;
+                int player = 0;
+                int unitNum = 0;
+                int unitCount = 0;
                 while (parsing)
                 {
                     var text = tr.ReadLine();
@@ -49,10 +52,39 @@ namespace Samurai.Client.Wp7.Api
                             break;
 
                         case 3:
-                            if (y < height)
-                                mapTiles[y++] = text;
-                            else
+                            mapTiles[y++] = text;
+                            if (y == height)
                                 ++stage;
+                            break;
+
+                        case 4:
+                            unitCount = int.Parse(text);
+                            unitNum = 0;
+                            stage = 5;
+                            break;
+
+                        case 5:
+                            parts = text.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                            Unit unit = null;
+                            switch (parts[0])
+                            {
+                                case "samurai":
+                                    unit = new SamuraiServer.Data.Samurai();
+                                    break;
+
+                                default:
+                                    return null;
+                            }
+
+                            unit.X = int.Parse(parts[1]);
+                            unit.Y = int.Parse(parts[2]);
+
+                            ++unitNum;
+                            if (unitNum == unitCount)
+                            {
+                                ++player;
+                                stage = player == maxPlayers ? 6 : 4;
+                            }
                             break;
 
                         default:

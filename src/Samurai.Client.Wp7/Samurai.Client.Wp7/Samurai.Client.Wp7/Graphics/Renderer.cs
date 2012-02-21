@@ -20,9 +20,11 @@ namespace Samurai.Client.Wp7.Graphics
             textures.Add(content.Load<Texture2D>("Textures\\rock"));
             textures.Add(content.Load<Texture2D>("Textures\\trees"));
             textures.Add(content.Load<Texture2D>("Textures\\water"));
+
+            textures.Add(content.Load<Texture2D>("Textures\\samurai_red_64"));
         }
 
-        public void DrawMap(GraphicsDevice device, SpriteBatch sb, Map map, int xOffset, int yOffset)
+        public void DrawMap(GraphicsDevice device, SpriteBatch sb, Map map, GameState state, int xOffset, int yOffset)
         {
             if (sb == null || map == null)
                 return;
@@ -32,6 +34,7 @@ namespace Samurai.Client.Wp7.Graphics
             int width = Math.Min((xOffset / CellWidth) + (device.Viewport.Width / CellWidth) + 2, map.Tiles.Length);
             int height = Math.Min((yOffset / CellWidth) + (device.Viewport.Height / CellWidth) + 2, map.Tiles[0].Length); // All columns are of equal height
 
+            sb.Begin();
             drawRect.X = -xStart;
             for (int xIndex = xOffset / CellWidth; xIndex < width && xIndex >= 0; ++xIndex)
             {
@@ -45,6 +48,9 @@ namespace Samurai.Client.Wp7.Graphics
                 }
                 drawRect.X += CellWidth;
             }
+            sb.End();
+
+            // TODO: Draw units
         }
 
         public Point GetMapSize(Map map)
@@ -66,6 +72,18 @@ namespace Samurai.Client.Wp7.Graphics
                     return textures[2];
                 case "Water":
                     return textures[3];
+
+                default:
+                    return null;
+            }
+        }
+
+        protected Texture2D GetUnitTex(Unit unit)
+        {
+            switch (unit.ImageSpriteResource)
+            {
+                case "samurai_red_64":
+                    return textures[4];
 
                 default:
                     return null;
