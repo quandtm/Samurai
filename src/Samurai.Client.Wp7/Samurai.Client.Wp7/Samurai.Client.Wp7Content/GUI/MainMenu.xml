@@ -6,6 +6,10 @@
       <TextBlock Format="{parenttext}" Font="MainMenuFont.spritefont" Color="#000000" />
     </Button>
 
+    <Button Name="btnSingleplayer" Text="Practice">
+      <TextBlock Format="{parenttext}" Font="MainMenuFont.spritefont" Color="#000000" />
+    </Button>
+
     <Button Name="btnPlay" Text="Create Game" Visibility="Enabled">
       <TextBlock Format="{parenttext}" Font="MainMenuFont.spritefont" Color="#000000" />
     </Button>

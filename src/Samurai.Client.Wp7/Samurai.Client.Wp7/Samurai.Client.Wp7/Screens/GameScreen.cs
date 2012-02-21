@@ -24,6 +24,8 @@ namespace Samurai.Client.Wp7.Screens
         private Player player;
         private GameState game;
         private ServerApi api;
+        private bool isPractice;
+        private Singleplayer spapi;
 
         public GameScreen()
             : base()
@@ -37,6 +39,15 @@ namespace Samurai.Client.Wp7.Screens
             this.player = player;
             this.game = game;
             this.map = map;
+            this.isPractice = false;
+        }
+
+        public void InitPractice(Singleplayer spapi, Map map, GameState game)
+        {
+            this.spapi = spapi;
+            this.map = map;
+            this.game = game;
+            this.isPractice = true;
         }
 
         public override void LoadContent()
@@ -101,7 +112,21 @@ namespace Samurai.Client.Wp7.Screens
                 }
             }
 
+            if (isPractice)
+                UpdateSinglePlayer();
+            else
+                UpdateMultiPlayer();
+
             base.Update(elapsedSeconds);
+        }
+
+        private void UpdateMultiPlayer()
+        {
+            // TODO: Implement multi-player
+        }
+
+        private void UpdateSinglePlayer()
+        {
         }
 
         public override void Draw(double elapsedSeconds, GraphicsDevice device)

@@ -111,6 +111,7 @@
       <Link>Api\Tiles\Water.cs</Link>
     </Compile>
     <Compile Include="Api\ServerApi.cs" />
+    <Compile Include="Api\Singleplayer.cs" />
     <Compile Include="BackgroundJobs.cs" />
     <Compile Include="Graphics\Renderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Screens\ScreenManager.cs" />
     <Compile Include="Screens\SettingsScreen.cs" />
     <Compile Include="Settings.cs" />
+    <EmbeddedResource Include="00000000-0000-0000-0000-000000000000.map" />
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml">
       <XnaPlatformSpecific>true</XnaPlatformSpecific>

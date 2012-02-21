@@ -1,6 +1,6 @@
 using System;
-using System.IO;
 using System.IO.IsolatedStorage;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.GamerServices;
@@ -10,7 +10,6 @@ using Samurai.Client.Wp7.Api;
 using SamuraiServer.Data;
 using XNInterface.Controls;
 using XNInterface.Input;
-using System.Threading;
 
 namespace Samurai.Client.Wp7.Screens
 {
@@ -63,6 +62,8 @@ namespace Samurai.Client.Wp7.Screens
             var registerBtn = window.GetChild<Button>("btnRegister");
             var settingsBtn = window.GetChild<Button>("btnSettings");
             var status = window.GetChild<TextBlock>("status");
+            var practice = window.GetChild<Button>("btnSingleplayer");
+
             if (status != null)
                 status.Enabled = false;
 
@@ -73,6 +74,22 @@ namespace Samurai.Client.Wp7.Screens
                     {
                         Manager.GetOrCreateScreen<CreateGameScreen>().Init(api, Player);
                         Manager.TransitionTo<CreateGameScreen>();
+                    };
+            }
+
+            if (practice != null)
+            {
+                practice.Triggered +=
+                    (b) =>
+                    {
+                        // TODO: Move to a setup screen
+                        var sp = new Singleplayer();
+                        var map = sp.LoadMap(Guid.Empty);
+                        if (map == null)
+                            Manager.ExitGame();
+                        var state = sp.CreateNewState(map, 1);
+                        Manager.GetOrCreateScreen<GameScreen>().InitPractice(sp, map, state);
+                        Manager.TransitionTo<GameScreen>();
                     };
             }
 
