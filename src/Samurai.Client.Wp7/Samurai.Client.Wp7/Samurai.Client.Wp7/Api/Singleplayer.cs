@@ -1,14 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using SamuraiServer.Data;
-using System.Collections.Generic;
 
 namespace Samurai.Client.Wp7.Api
 {
-    public class Singleplayer
+    public static class Singleplayer
     {
-        public Map LoadMap(Guid mapGuid)
+        public static Map LoadMap(Guid mapGuid)
         {
             string[] mapTiles = null;
             string mapName = "";
@@ -110,7 +110,7 @@ namespace Samurai.Client.Wp7.Api
             return map;
         }
 
-        public GameState CreateNewState(Map map, int numAi)
+        public static GameState CreateNewState(Map map, int numAi)
         {
             int players = numAi + 1;
             if (players < map.MinPlayers || players > map.MaxPlayers)
@@ -142,7 +142,7 @@ namespace Samurai.Client.Wp7.Api
             return gs;
         }
 
-        private GamePlayer CreatePlayer(string playerName, List<Unit> startingUnits)
+        private static GamePlayer CreatePlayer(string playerName, List<Unit> startingUnits)
         {
             var player = new GamePlayer();
             player.Id = Guid.NewGuid();

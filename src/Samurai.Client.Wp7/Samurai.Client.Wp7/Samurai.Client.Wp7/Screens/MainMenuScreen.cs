@@ -83,14 +83,13 @@ namespace Samurai.Client.Wp7.Screens
                     (b) =>
                     {
                         // TODO: Move to a setup screen
-                        var sp = new Singleplayer();
-                        var map = sp.LoadMap(Guid.Empty);
+                        var map = Singleplayer.LoadMap(Guid.Empty);
                         if (map == null)
                             Manager.ExitGame();
-                        var state = sp.CreateNewState(map, 1);
+                        var state = Singleplayer.CreateNewState(map, 1);
                         if (state == null)
                             Manager.ExitGame();
-                        Manager.GetOrCreateScreen<GameScreen>().InitPractice(sp, map, state);
+                        Manager.GetOrCreateScreen<GameScreen>().InitPractice(map, state);
                         Manager.TransitionTo<GameScreen>();
                     };
             }

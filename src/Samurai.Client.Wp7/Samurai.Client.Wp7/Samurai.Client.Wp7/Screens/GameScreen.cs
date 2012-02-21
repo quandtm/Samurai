@@ -25,7 +25,6 @@ namespace Samurai.Client.Wp7.Screens
         private GameState game;
         private ServerApi api;
         private bool isPractice;
-        private Singleplayer spapi;
 
         public GameScreen()
             : base()
@@ -42,9 +41,8 @@ namespace Samurai.Client.Wp7.Screens
             this.isPractice = false;
         }
 
-        public void InitPractice(Singleplayer spapi, Map map, GameState game)
+        public void InitPractice(Map map, GameState game)
         {
-            this.spapi = spapi;
             this.map = map;
             this.game = game;
             this.isPractice = true;
