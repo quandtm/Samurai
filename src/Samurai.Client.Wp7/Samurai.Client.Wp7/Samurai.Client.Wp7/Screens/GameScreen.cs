@@ -109,21 +109,7 @@ namespace Samurai.Client.Wp7.Screens
                 }
             }
 
-            if (isPractice)
-                UpdateSinglePlayer();
-            else
-                UpdateMultiPlayer();
-
             base.Update(elapsedSeconds);
-        }
-
-        private void UpdateMultiPlayer()
-        {
-            // TODO: Implement multi-player
-        }
-
-        private void UpdateSinglePlayer()
-        {
         }
 
         public override void Draw(double elapsedSeconds, GraphicsDevice device)
