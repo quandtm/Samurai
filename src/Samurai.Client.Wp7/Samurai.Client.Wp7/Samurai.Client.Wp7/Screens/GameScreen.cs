@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,6 +28,7 @@ namespace Samurai.Client.Wp7.Screens
         private ServerApi api;
         private bool isPractice;
         private Unit selectedUnit = null;
+        private readonly List<MoveIntent> intents = new List<MoveIntent>();
 
         public GameScreen()
             : base()
@@ -208,7 +210,7 @@ namespace Samurai.Client.Wp7.Screens
             if (renderer == null)
                 return;
 
-            renderer.DrawMap(device, sb, map, game, xOffset, yOffset, selectedUnit);
+            renderer.DrawMap(device, sb, map, game, xOffset, yOffset, selectedUnit, intents);
 
             base.Draw(elapsedSeconds, device);
         }

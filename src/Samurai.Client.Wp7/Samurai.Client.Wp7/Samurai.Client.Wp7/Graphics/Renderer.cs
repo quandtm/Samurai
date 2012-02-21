@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using SamuraiServer.Data;
+using Samurai.Client.Wp7.Api;
 
 namespace Samurai.Client.Wp7.Graphics
 {
@@ -24,7 +25,7 @@ namespace Samurai.Client.Wp7.Graphics
             textures.Add(content.Load<Texture2D>("Textures\\samurai_red_64"));
         }
 
-        public void DrawMap(GraphicsDevice device, SpriteBatch sb, Map map, GameState state, int xOffset, int yOffset, Unit selectedUnit)
+        public void DrawMap(GraphicsDevice device, SpriteBatch sb, Map map, GameState state, int xOffset, int yOffset, Unit selectedUnit, List<MoveIntent> intents)
         {
             if (sb == null || map == null)
                 return;
@@ -63,29 +64,42 @@ namespace Samurai.Client.Wp7.Graphics
                         {
                             if (unit.X >= (xOffset / CellWidth) && unit.Y >= (yOffset / CellWidth) && unit.X < width && unit.Y < height)
                             {
-                                drawRect.Y = -yStart + ((unit.Y - (yOffset / CellWidth)) * CellWidth) + (int)origin.X;
-                                drawRect.X = -xStart + ((unit.X - (xOffset / CellWidth)) * CellWidth) + (int)origin.X;
-                                var tex = GetUnitTex(unit);
-                                if (tex != null)
-                                {
-                                    if (selectedUnit == unit)
-                                    {
-                                        drawRect.Width = (int)(drawRect.Width * 1.2f);
-                                        drawRect.Height = (int)(drawRect.Height * 1.2f);
-                                    }
-                                    sb.Draw(tex, drawRect, null, Color.White, 0, origin, SpriteEffects.None, 0);
-                                    if (selectedUnit == unit)
-                                    {
-                                        drawRect.Width = CellWidth;
-                                        drawRect.Height = CellWidth;
-                                    }
-                                }
+                                DrawUnit(sb, xOffset, yOffset, selectedUnit, xStart, yStart, ref origin, unit, unit.X, unit.Y);
                             }
                         }
                     }
                 }
             }
             sb.End();
+
+            if (intents.Count > 0)
+            {
+                sb.Begin();
+                for (int i = 0; i < intents.Count; i++)
+                    DrawUnit(sb, xOffset, yOffset, null, xStart, yStart, ref origin, intents[i].Unit, intents[i].X, intents[i].Y);
+                sb.End();
+            }
+        }
+
+        private void DrawUnit(SpriteBatch sb, int xOffset, int yOffset, Unit selectedUnit, int xStart, int yStart, ref Vector2 origin, Unit unit, int unitX, int unitY)
+        {
+            drawRect.Y = -yStart + ((unitY - (yOffset / CellWidth)) * CellWidth) + (int)origin.X;
+            drawRect.X = -xStart + ((unitX - (xOffset / CellWidth)) * CellWidth) + (int)origin.X;
+            var tex = GetUnitTex(unit);
+            if (tex != null)
+            {
+                if (selectedUnit == unit)
+                {
+                    drawRect.Width = (int)(drawRect.Width * 1.2f);
+                    drawRect.Height = (int)(drawRect.Height * 1.2f);
+                }
+                sb.Draw(tex, drawRect, null, Color.White, 0, origin, SpriteEffects.None, 0);
+                if (selectedUnit == unit)
+                {
+                    drawRect.Width = CellWidth;
+                    drawRect.Height = CellWidth;
+                }
+            }
         }
 
         public Point GetMapSize(Map map)
