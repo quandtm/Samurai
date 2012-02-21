@@ -155,5 +155,15 @@ namespace Samurai.Client.Wp7.Api
                 player.Units.Add(startingUnits[i]);
             return player;
         }
+
+        public static MoveIntent IntendMove(Unit unit, int targetX, int targetY)
+        {
+            return new MoveIntent()
+            {
+                Unit = unit,
+                X = targetX,
+                Y = targetY
+            };
+        }
     }
 }

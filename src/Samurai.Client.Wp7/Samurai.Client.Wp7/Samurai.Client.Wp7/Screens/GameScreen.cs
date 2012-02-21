@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -141,7 +142,13 @@ namespace Samurai.Client.Wp7.Screens
                 {
                     // Change selection if player taps another of their units, or deselect if they tap the same unit
                     if (target == selectedUnit)
+                    {
+                        // If select unit is re-tapped, deselect and cancel any pending moves for that unit
+                        int removeIndex;
+                        if (HasExistingIntent(selectedUnit, out removeIndex))
+                            intents.RemoveAt(removeIndex);
                         selectedUnit = null;
+                    }
                     else if (IsPlayerUnit(gamePlayer, target))
                         selectedUnit = target;
                 }
@@ -154,11 +161,37 @@ namespace Samurai.Client.Wp7.Screens
                         // Determine path
                         // Validate distance vs # moves
                         // Move unit if move is valid
+                        // TODO: Add proper path planning to determine distance
+                        int distance = Math.Abs(x - selectedUnit.X) + Math.Abs(y - selectedUnit.Y);
+                        if (distance > selectedUnit.Moves)
+                            selectedUnit = null;
+                        else
+                        {
+                            int removeIndex;
+                            if (HasExistingIntent(selectedUnit, out removeIndex))
+                                intents.RemoveAt(removeIndex);
+                            intents.Add(Singleplayer.IntendMove(selectedUnit, x, y));
+                            selectedUnit = null;
+                        }
                     }
                     else
                         selectedUnit = null;
                 }
             }
+        }
+
+        private bool HasExistingIntent(Unit unit, out int index)
+        {
+            index = -1;
+            for (int i = 0; i < intents.Count; i++)
+            {
+                if (intents[i].Unit == unit)
+                {
+                    index = i;
+                    return true;
+                }
+            }
+            return false;
         }
 
         private bool IsPlayerUnit(GamePlayer gamePlayer, Unit target)

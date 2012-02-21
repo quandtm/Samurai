@@ -64,7 +64,7 @@ namespace Samurai.Client.Wp7.Graphics
                         {
                             if (unit.X >= (xOffset / CellWidth) && unit.Y >= (yOffset / CellWidth) && unit.X < width && unit.Y < height)
                             {
-                                DrawUnit(sb, xOffset, yOffset, selectedUnit, xStart, yStart, ref origin, unit, unit.X, unit.Y);
+                                DrawUnit(sb, xOffset, yOffset, selectedUnit, xStart, yStart, ref origin, unit, unit.X, unit.Y, Color.White);
                             }
                         }
                     }
@@ -76,12 +76,12 @@ namespace Samurai.Client.Wp7.Graphics
             {
                 sb.Begin();
                 for (int i = 0; i < intents.Count; i++)
-                    DrawUnit(sb, xOffset, yOffset, null, xStart, yStart, ref origin, intents[i].Unit, intents[i].X, intents[i].Y);
+                    DrawUnit(sb, xOffset, yOffset, null, xStart, yStart, ref origin, intents[i].Unit, intents[i].X, intents[i].Y, Color.Gray);
                 sb.End();
             }
         }
 
-        private void DrawUnit(SpriteBatch sb, int xOffset, int yOffset, Unit selectedUnit, int xStart, int yStart, ref Vector2 origin, Unit unit, int unitX, int unitY)
+        private void DrawUnit(SpriteBatch sb, int xOffset, int yOffset, Unit selectedUnit, int xStart, int yStart, ref Vector2 origin, Unit unit, int unitX, int unitY, Color tint)
         {
             drawRect.Y = -yStart + ((unitY - (yOffset / CellWidth)) * CellWidth) + (int)origin.X;
             drawRect.X = -xStart + ((unitX - (xOffset / CellWidth)) * CellWidth) + (int)origin.X;
@@ -93,7 +93,7 @@ namespace Samurai.Client.Wp7.Graphics
                     drawRect.Width = (int)(drawRect.Width * 1.2f);
                     drawRect.Height = (int)(drawRect.Height * 1.2f);
                 }
-                sb.Draw(tex, drawRect, null, Color.White, 0, origin, SpriteEffects.None, 0);
+                sb.Draw(tex, drawRect, null, tint, 0, origin, SpriteEffects.None, 0);
                 if (selectedUnit == unit)
                 {
                     drawRect.Width = CellWidth;
