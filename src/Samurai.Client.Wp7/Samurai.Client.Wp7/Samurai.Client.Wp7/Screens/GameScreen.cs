@@ -143,6 +143,19 @@ namespace Samurai.Client.Wp7.Screens
                     else if (IsPlayerUnit(gamePlayer, target))
                         selectedUnit = target;
                 }
+                else
+                {
+                    int x, y;
+                    GetCellLocation(gesture.Position, out x, out y);
+                    if (x >= 0 && x < map.Tiles.Length && y >= 0 && y < map.Tiles[0].Length)
+                    {
+                        // Determine path
+                        // Validate distance vs # moves
+                        // Move unit if move is valid
+                    }
+                    else
+                        selectedUnit = null;
+                }
             }
         }
 
@@ -156,14 +169,20 @@ namespace Samurai.Client.Wp7.Screens
             return false;
         }
 
+        private void GetCellLocation(Vector2 position, out int x, out int y)
+        {
+            position.X += xOffset;
+            position.Y += yOffset;
+            x = (int)(position.X / Renderer.CellWidth);
+            y = (int)(position.Y / Renderer.CellWidth);
+        }
+
         private bool GetTappedUnit(out Unit selectedUnit, Vector2 position)
         {
             selectedUnit = null;
 
-            position.X += xOffset;
-            position.Y += yOffset;
-            int x = (int)(position.X / Renderer.CellWidth);
-            int y = (int)(position.Y / Renderer.CellWidth);
+            int x, y;
+            GetCellLocation(position, out x, out y);
 
             for (int p = 0; p < game.Players.Count; p++)
             {
