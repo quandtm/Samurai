@@ -10,6 +10,7 @@ namespace SamuraiServer.Data
         public Map()
         {
             Id = Guid.NewGuid();
+            StartingUnits = new Dictionary<int, List<Unit>>();
         }
 
         public Guid Id { get; private set; }

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using SamuraiServer.Data;
+using System.Collections.Generic;
 
 namespace Samurai.Client.Wp7.Api
 {
@@ -13,6 +14,7 @@ namespace Samurai.Client.Wp7.Api
             string mapName = "";
             int minPlayers = 0;
             int maxPlayers = 0;
+            List<List<Unit>> startingUnits = new List<List<Unit>>();
 
             var assembly = Assembly.GetExecutingAssembly();
             var names = assembly.GetManifestResourceNames();
@@ -61,6 +63,7 @@ namespace Samurai.Client.Wp7.Api
                             unitCount = int.Parse(text);
                             unitNum = 0;
                             stage = 5;
+                            startingUnits.Add(new List<Unit>());
                             break;
 
                         case 5:
@@ -78,6 +81,7 @@ namespace Samurai.Client.Wp7.Api
 
                             unit.X = int.Parse(parts[1]);
                             unit.Y = int.Parse(parts[2]);
+                            startingUnits[player].Add(unit);
 
                             ++unitNum;
                             if (unitNum == unitCount)
@@ -101,11 +105,17 @@ namespace Samurai.Client.Wp7.Api
             map.MaxPlayers = minPlayers;
             map.MinPlayers = maxPlayers;
             map.Name = mapName;
+            for (int p = 0; p < maxPlayers; p++)
+                map.StartingUnits.Add(p, startingUnits[p]);
             return map;
         }
 
         public GameState CreateNewState(Map map, int numAi)
         {
+            int players = numAi + 1;
+            if (players < map.MinPlayers || players > map.MaxPlayers)
+                return null;
+
             var gs = new GameState();
             gs.MapId = map.Id;
             gs.Id = Guid.NewGuid();
@@ -113,12 +123,12 @@ namespace Samurai.Client.Wp7.Api
             gs.Started = true;
             gs.Turn = 0;
 
-            var human = CreatePlayer("Human");
+            var human = CreatePlayer("Human", map.StartingUnits[0]);
             gs.Players.Add(human);
 
             for (int i = 0; i < numAi; i++)
             {
-                var ai = CreatePlayer("AI #" + i.ToString());
+                var ai = CreatePlayer("AI #" + i.ToString(), map.StartingUnits[i + 1]);
                 gs.Players.Add(ai);
             }
 
@@ -132,7 +142,7 @@ namespace Samurai.Client.Wp7.Api
             return gs;
         }
 
-        private GamePlayer CreatePlayer(string playerName)
+        private GamePlayer CreatePlayer(string playerName, List<Unit> startingUnits)
         {
             var player = new GamePlayer();
             player.Id = Guid.NewGuid();
@@ -141,6 +151,8 @@ namespace Samurai.Client.Wp7.Api
             player.Player.Id = Guid.NewGuid();
             player.Player.Name = playerName;
             player.Score = 0;
+            for (int i = 0; i < startingUnits.Count; i++)
+                player.Units.Add(startingUnits[i]);
             return player;
         }
     }

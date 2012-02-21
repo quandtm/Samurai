@@ -50,7 +50,26 @@ namespace Samurai.Client.Wp7.Graphics
             }
             sb.End();
 
-            // TODO: Draw units
+            sb.Begin();
+            for (int p = 0; p < state.Players.Count; p++)
+            {
+                for (int u = 0; u < state.Players[p].Units.Count; u++)
+                {
+                    var unit = state.Players[p].Units[u];
+                    if (unit.CurrentHitPoints > 0)
+                    {
+                        if (unit.X >= (xOffset / CellWidth) && unit.Y >= (yOffset / CellWidth) && unit.X < width && unit.Y < height)
+                        {
+                            drawRect.Y = -yStart + ((unit.Y - (yOffset / CellWidth)) * CellWidth);
+                            drawRect.X = -xStart + ((unit.X - (xOffset / CellWidth)) * CellWidth);
+                            var tex = GetUnitTex(unit);
+                            if (tex != null)
+                                sb.Draw(tex, drawRect, Color.White);
+                        }
+                    }
+                }
+            }
+            sb.End();
         }
 
         public Point GetMapSize(Map map)

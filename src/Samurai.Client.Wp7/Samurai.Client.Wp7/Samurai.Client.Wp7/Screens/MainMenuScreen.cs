@@ -88,6 +88,8 @@ namespace Samurai.Client.Wp7.Screens
                         if (map == null)
                             Manager.ExitGame();
                         var state = sp.CreateNewState(map, 1);
+                        if (state == null)
+                            Manager.ExitGame();
                         Manager.GetOrCreateScreen<GameScreen>().InitPractice(sp, map, state);
                         Manager.TransitionTo<GameScreen>();
                     };
