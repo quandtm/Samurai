@@ -9,7 +9,7 @@ namespace Samurai.Client.Wp7.Graphics
 {
     public class Renderer
     {
-        private const int CellWidth = 64;
+        public const int CellWidth = 64;
         private readonly List<Texture2D> textures = new List<Texture2D>();
         private Rectangle drawRect = new Rectangle(0, 0, CellWidth, CellWidth);
 
@@ -53,18 +53,21 @@ namespace Samurai.Client.Wp7.Graphics
             sb.Begin();
             for (int p = 0; p < state.Players.Count; p++)
             {
-                for (int u = 0; u < state.Players[p].Units.Count; u++)
+                if (state.Players[p].IsAlive)
                 {
-                    var unit = state.Players[p].Units[u];
-                    if (unit.CurrentHitPoints > 0)
+                    for (int u = 0; u < state.Players[p].Units.Count; u++)
                     {
-                        if (unit.X >= (xOffset / CellWidth) && unit.Y >= (yOffset / CellWidth) && unit.X < width && unit.Y < height)
+                        var unit = state.Players[p].Units[u];
+                        if (unit.CurrentHitPoints > 0)
                         {
-                            drawRect.Y = -yStart + ((unit.Y - (yOffset / CellWidth)) * CellWidth);
-                            drawRect.X = -xStart + ((unit.X - (xOffset / CellWidth)) * CellWidth);
-                            var tex = GetUnitTex(unit);
-                            if (tex != null)
-                                sb.Draw(tex, drawRect, Color.White);
+                            if (unit.X >= (xOffset / CellWidth) && unit.Y >= (yOffset / CellWidth) && unit.X < width && unit.Y < height)
+                            {
+                                drawRect.Y = -yStart + ((unit.Y - (yOffset / CellWidth)) * CellWidth);
+                                drawRect.X = -xStart + ((unit.X - (xOffset / CellWidth)) * CellWidth);
+                                var tex = GetUnitTex(unit);
+                                if (tex != null)
+                                    sb.Draw(tex, drawRect, Color.White);
+                            }
                         }
                     }
                 }

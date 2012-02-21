@@ -25,6 +25,7 @@ namespace Samurai.Client.Wp7.Screens
         private GameState game;
         private ServerApi api;
         private bool isPractice;
+        private Unit selectedUnit = null;
 
         public GameScreen()
             : base()
@@ -109,7 +110,56 @@ namespace Samurai.Client.Wp7.Screens
                 }
             }
 
+            // Handle Gestures
+            while (TouchPanel.IsGestureAvailable)
+                HandleGesture();
+
             base.Update(elapsedSeconds);
+        }
+
+        private void HandleGesture()
+        {
+            var gesture = TouchPanel.ReadGesture();
+            if (gesture.GestureType != GestureType.Tap)
+                return;
+
+            if (selectedUnit == null)
+            {
+                // Figure out which unit was selected (if any)
+                GetTappedUnit(out selectedUnit, gesture.Position);
+            }
+            else
+            {
+                // Process move
+            }
+        }
+
+        private bool GetTappedUnit(out Unit selectedUnit, Vector2 position)
+        {
+            selectedUnit = null;
+
+            position.X += xOffset;
+            position.Y += yOffset;
+            int x = (int)(position.X / Renderer.CellWidth);
+            int y = (int)(position.Y / Renderer.CellWidth);
+
+            for (int p = 0; p < game.Players.Count; p++)
+            {
+                if (game.Players[p].IsAlive)
+                {
+                    for (int u = 0; u < game.Players[p].Units.Count; u++)
+                    {
+                        var unit = game.Players[p].Units[u];
+                        if (unit.X == x && unit.Y == y)
+                        {
+                            selectedUnit = unit;
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
 
         public override void Draw(double elapsedSeconds, GraphicsDevice device)
@@ -129,6 +179,7 @@ namespace Samurai.Client.Wp7.Screens
 
         public override void OnNavigatedTo()
         {
+            TouchPanel.EnabledGestures = GestureType.Tap;
             base.OnNavigatedTo();
         }
     }
