@@ -34,6 +34,7 @@ namespace Samurai.Client.Win8.Graphics
         public Device1 Device { get { return _device; } }
 
         private RenderTargetView _rtv;
+        private Texture2D _dsvTex;
         private DepthStencilView _dsv;
 
         private bool _isReady;
@@ -125,6 +126,12 @@ namespace Samurai.Client.Win8.Graphics
                 }
 
                 // TODO: Create DSV
+                var dsDesc = new Texture2DDescription()
+                {
+                    BindFlags = BindFlags.DepthStencil,
+                    CpuAccessFlags = CpuAccessFlags.None,
+                    Format = DXGI.Format.D24_UNorm_S8_UInt
+                };
                 // TODO: Set DSV
                 _context.OutputMerger.SetTargets(_rtv);
                 _context.Rasterizer.SetViewport(0, 0, (float)_width, (float)_height);
