@@ -13,6 +13,16 @@ namespace Samurai.Client.Win8
             Content.RootDirectory = "Content";
         }
 
+        protected override void LoadContent()
+        {
+            base.LoadContent();
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
