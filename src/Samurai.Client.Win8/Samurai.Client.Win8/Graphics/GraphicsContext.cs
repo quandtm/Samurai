@@ -7,7 +7,7 @@ using DXGI = SharpDX.DXGI;
 
 namespace Samurai.Client.Win8.Graphics
 {
-    public class Renderer : IDisposable
+    public class GraphicsContext : IDisposable
     {
         private double _width, _height;
         private CoreWindow _window;
@@ -35,7 +35,7 @@ namespace Samurai.Client.Win8.Graphics
 
         private bool _isReady;
 
-        public Renderer()
+        public GraphicsContext()
         {
             _isReady = false;
         }

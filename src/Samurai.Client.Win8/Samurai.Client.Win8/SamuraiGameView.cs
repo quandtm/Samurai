@@ -6,12 +6,12 @@ namespace Samurai.Client.Win8
 {
     public class SamuraiGameView : IFrameworkView
     {
-        private Renderer _renderer;
+        private GraphicsContext _renderer;
         private bool _running;
 
         public void Initialize(CoreApplicationView applicationView)
         {
-            _renderer = new Renderer();
+            _renderer = new GraphicsContext();
             _renderer.InitialiseNonWindow();
             _running = true;
         }
