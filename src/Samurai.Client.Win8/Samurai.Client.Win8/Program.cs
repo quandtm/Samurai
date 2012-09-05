@@ -1,5 +1,4 @@
-﻿using MonoGame.Framework;
-using Windows.ApplicationModel.Core;
+﻿using Windows.ApplicationModel.Core;
 
 namespace Samurai.Client.Win8
 {
@@ -7,7 +6,7 @@ namespace Samurai.Client.Win8
     {
         static void Main()
         {
-            var factory = new GameFrameworkViewSource<SamuraiGame>();
+            var factory = new SamuraiGameViewSource();
             CoreApplication.Run(factory);
         }
     }
