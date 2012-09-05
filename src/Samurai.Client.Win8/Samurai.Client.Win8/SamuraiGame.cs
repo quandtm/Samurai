@@ -10,6 +10,7 @@ namespace Samurai.Client.Win8
             : base()
         {
             _graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
         }
 
         protected override void Draw(GameTime gameTime)
