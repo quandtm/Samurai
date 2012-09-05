@@ -13,7 +13,6 @@ namespace Samurai.Client.Win8
         {
             _renderer = new Renderer();
             _renderer.InitialiseNonWindow();
-            applicationView.CoreWindow.SizeChanged += (s, a) => _renderer.Resize();
             _running = true;
         }
 
@@ -23,6 +22,11 @@ namespace Samurai.Client.Win8
 
         public void Run()
         {
+            if (_renderer.Window == null)
+                SetWindow(CoreWindow.GetForCurrentThread());
+
+            _renderer.Window.Activate();
+
             while (_running)
             {
                 _renderer.Draw();
