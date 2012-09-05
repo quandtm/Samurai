@@ -14,7 +14,7 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Samurai.Client.Win8.App">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Samurai.Client.Win8.Program">
       <VisualElements DisplayName="Samurai" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Samurai for Windows 8" ForegroundText="light" BackgroundColor="#464646">
         <DefaultTile ShowName="allLogos" />
         <SplashScreen Image="Assets\SplashScreen.png" />
