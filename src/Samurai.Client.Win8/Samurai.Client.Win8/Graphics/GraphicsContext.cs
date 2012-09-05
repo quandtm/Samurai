@@ -141,6 +141,7 @@ namespace Samurai.Client.Win8.Graphics
 
         public bool InitD2DResources()
         {
+            // TODO: Init D2D Resources
             return true;
         }
 
@@ -191,6 +192,7 @@ namespace Samurai.Client.Win8.Graphics
         {
             CleanupWindowResources();
             CleanupDeviceResources();
+            CleanupD2DResources();
         }
 
         private void CleanupDeviceResources()
@@ -204,6 +206,11 @@ namespace Samurai.Client.Win8.Graphics
             SafeRelease(ref _rtv);
             SafeRelease(ref _dsv);
             SafeRelease(ref _swap);
+        }
+
+        private void CleanupD2DResources()
+        {
+            // TODO: Cleanup D2D
         }
 
         private static void SafeRelease<T>(ref T obj) where T : ComObject
