@@ -7,7 +7,7 @@ using DXGI = SharpDX.DXGI;
 
 namespace Samurai.Client.Win8.Graphics
 {
-    public class Renderer
+    public class Renderer : IDisposable
     {
         private double _width, _height;
         private CoreWindow _window;
@@ -21,6 +21,8 @@ namespace Samurai.Client.Win8.Graphics
                     _window.SizeChanged -= HandleWindowSizeChange;
                 _window = value;
                 _window.SizeChanged += HandleWindowSizeChange;
+                CleanupWindowResources();
+                InitWindowResources();
             }
         }
 
@@ -151,6 +153,34 @@ namespace Samurai.Client.Win8.Graphics
 
             _context.ClearRenderTargetView(_rtv, Colors.CornflowerBlue);
             _swap.Present(1, DXGI.PresentFlags.None, new DXGI.PresentParameters());
+        }
+
+        public void Dispose()
+        {
+            CleanupWindowResources();
+            CleanupDeviceResources();
+        }
+
+        private void CleanupDeviceResources()
+        {
+            SafeRelease(ref _context);
+            SafeRelease(ref _device);
+        }
+
+        private void CleanupWindowResources()
+        {
+            SafeRelease(ref _rtv);
+            SafeRelease(ref _dsv);
+            SafeRelease(ref _swap);
+        }
+
+        private static void SafeRelease<T>(ref T obj) where T : ComObject
+        {
+            if (obj != null)
+            {
+                obj.Dispose();
+                obj = null;
+            }
         }
     }
 }

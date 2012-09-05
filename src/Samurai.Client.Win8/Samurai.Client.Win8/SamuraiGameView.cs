@@ -31,6 +31,8 @@ namespace Samurai.Client.Win8
             {
                 _renderer.Draw();
             }
+
+            _renderer.Dispose();
         }
 
         public void SetWindow(CoreWindow window)
