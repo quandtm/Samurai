@@ -12,7 +12,6 @@ namespace Samurai.Client.Win8
         public void Initialize(CoreApplicationView applicationView)
         {
             _renderer = new GraphicsContext();
-            _renderer.InitialiseNonWindow();
             _running = true;
         }
 
@@ -22,14 +21,18 @@ namespace Samurai.Client.Win8
 
         public void Run()
         {
-            if (_renderer.Window == null)
-                SetWindow(CoreWindow.GetForCurrentThread());
+            if (!_renderer.IsReady)
+            {
+                _renderer.Window = CoreWindow.GetForCurrentThread();
+                _renderer.InitialiseAll();
+            }
 
             _renderer.Window.Activate();
 
             while (_running)
             {
-                _renderer.Draw();
+                _renderer.ClearBackbuffer();
+                _renderer.Present();
             }
 
             _renderer.Dispose();
@@ -38,7 +41,6 @@ namespace Samurai.Client.Win8
         public void SetWindow(CoreWindow window)
         {
             _renderer.Window = window;
-            _renderer.InitWindowResources();
         }
 
         public void Uninitialize()

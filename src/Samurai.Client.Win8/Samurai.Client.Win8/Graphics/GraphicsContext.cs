@@ -30,14 +30,30 @@ namespace Samurai.Client.Win8.Graphics
         private DeviceContext1 _context;
         private DXGI.SwapChain1 _swap;
 
+        public DeviceContext1 Context { get { return _context; } }
+        public Device1 Device { get { return _device; } }
+
         private RenderTargetView _rtv;
         private DepthStencilView _dsv;
 
         private bool _isReady;
+        private bool _enableD2d;
+        public bool HasDirect2D { get { return _enableD2d; } }
+        public bool IsReady { get { return _isReady; } }
 
-        public GraphicsContext()
+        public GraphicsContext(bool enableDirect2D = false)
         {
             _isReady = false;
+            _enableD2d = enableDirect2D;
+        }
+
+        public bool InitialiseAll()
+        {
+            if (!InitD2DResources()) return false;
+            if (!InitialiseNonWindow()) return false;
+            if (!InitWindowResources()) return false;
+
+            return true;
         }
 
         public bool InitialiseNonWindow()
@@ -60,7 +76,8 @@ namespace Samurai.Client.Win8.Graphics
 
         public bool InitWindowResources()
         {
-            if (_window == null) throw new ArgumentException();
+            if (_window == null) return false;
+            if (_device == null) return false;
 
             if (_rtv != null) _rtv.Dispose();
             if (_dsv != null) _dsv.Dispose();
@@ -107,6 +124,8 @@ namespace Samurai.Client.Win8.Graphics
                     _rtv = new RenderTargetView(_device, bbTex);
                 }
 
+                // TODO: Create DSV
+                // TODO: Set DSV
                 _context.OutputMerger.SetTargets(_rtv);
                 _context.Rasterizer.SetViewport(0, 0, (float)_width, (float)_height);
 
@@ -118,6 +137,11 @@ namespace Samurai.Client.Win8.Graphics
             {
                 return false;
             }
+        }
+
+        public bool InitD2DResources()
+        {
+            return true;
         }
 
         public void Resize()
@@ -147,12 +171,20 @@ namespace Samurai.Client.Win8.Graphics
             Resize();
         }
 
-        public void Draw()
+        public void ClearBackbuffer()
         {
-            if (!_isReady) return;
-
             _context.ClearRenderTargetView(_rtv, Colors.CornflowerBlue);
-            _swap.Present(1, DXGI.PresentFlags.None, new DXGI.PresentParameters());
+        }
+
+        public void Present()
+        {
+            _swap.Present(1, DXGI.PresentFlags.None);
+        }
+
+        public void SetDefaultRenderTarget()
+        {
+            // TODO: Set DSV
+            _context.OutputMerger.SetTargets(_rtv);
         }
 
         public void Dispose()
